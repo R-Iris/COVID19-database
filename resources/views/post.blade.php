@@ -1,6 +1,6 @@
 <!doctype html>
-<title>My Blog</title>
-<link rel="stylesheet" href="/app.css">
+<title>COVID19 Database</title>
+<link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" >
 
 <body>
 <article>
@@ -10,5 +10,5 @@
     </div>
 
 </article>
-<a href="/">Go Back</a>
+<a href="/COVID19-database/public/index.php">Go Back</a>
 </body>
