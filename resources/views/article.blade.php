@@ -4,11 +4,21 @@
 
 <body>
 <article>
-    <h1><?= $post->title; ?></h1>
+    <h1>Article #<?= $article->first()['articleID']; ?></h1>
     <div>
-        <?= $post->body; ?>
+        <?= $article->first()['summary']; ?>
+
+        <br>
+        <br>
+
+            <a href="<?= $article->first()['link']; ?>">View full article</a>
     </div>
 
 </article>
+
+<br>
+<br>
+<br>
+
 <a href="/COVID19-database/public/index.php">Go Back</a>
 </body>

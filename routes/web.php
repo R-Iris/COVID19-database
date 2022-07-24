@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Post;
+use App\Models\Article;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -17,14 +17,14 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-    return view('posts', [
-        'posts' => Post::all()
+    return view('articles', [
+        'articles' => (new App\Models\Article)->getAll()
     ]);
 });
 
-Route::get('posts/{post}', function ($slug) {
-    // Find a post by its slug and pass it to a view called "post"
-    return view('post', [
-        'post' => Post::find($slug)
+Route::get('articles/{article}', function ($articleID) {
+    // Find an article by its article ID and pass it to a view called "post"
+    return view('article', [
+        'article' => (new App\Models\Article)->findArticleByArticleID($articleID)
     ]);
-})->where('post', '[A-z_\-]+');
+})->whereNumber('article');
