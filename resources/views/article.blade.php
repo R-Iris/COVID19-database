@@ -20,5 +20,5 @@
 <br>
 <br>
 
-<a href="/COVID19-database/public/index.php">Go Back</a>
+<a href="/COVID19-database/public/articles">Go Back</a>
 </body>

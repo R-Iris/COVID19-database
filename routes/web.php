@@ -16,11 +16,18 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function() {
+    return view('login');
+})->name('login');
+
+Route::post('/checklogin', 'App\Http\Controllers\LoginController@checklogin')
+    ->name('login_controller');
+
+Route::get('/articles', function () {
     return view('articles', [
         'articles' => (new App\Models\Article)->getAll()
     ]);
-});
+})->name('articles');
 
 Route::get('articles/{article}', function ($articleID) {
     // Find an article by its article ID and pass it to a view called "post"
