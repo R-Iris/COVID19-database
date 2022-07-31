@@ -44,3 +44,7 @@ a:hover, a:active {
 .minorTopic {
     background-color: rgba(120, 119, 58, 0.32);
 }
+
+.topnav {
+    overflow: hidden;
+}

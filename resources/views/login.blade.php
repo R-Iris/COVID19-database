@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -97,10 +95,10 @@
 
 <h2> COVID-19 Non-Profit Health Organization</h2>
 
-<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+<button onclick="document.getElementById('login').style.display='block'" style="width:auto;">Login</button>
 <a href="/COVID19-database/public/articles" style="width:auto;">Visit as a guest</a>
 
-<div id="id01" class="modal">
+<div id="login" class="modal">
 
     <form class="modal-content animate" action="{{ route('login_controller') }}" method="post">
         @csrf
@@ -115,13 +113,13 @@
         </div>
 
         <div class="container" style="background-color:#36425d; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">Cancel</button>
         </div>
     </form>
 </div>
 
 <script>
-    var modal = document.getElementById('id01');
+    var modal = document.getElementById('login');
 
     window.onclick = function(event) {
         if (event.target == modal) {

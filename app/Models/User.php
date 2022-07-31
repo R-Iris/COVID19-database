@@ -22,6 +22,19 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'userID';
 
+    protected $fillable = [
+        'userID',
+        'firstName',
+        'lastName',
+        'orgID',
+        'citizenship',
+        'email',
+        'phone',
+        'role',
+        'birthDate',
+        'password'
+    ];
+
     // Model is not timestamped
     public $timestamps  = false;
 
@@ -33,5 +46,10 @@ class User extends Authenticatable
     public function findUserbyUserID(int $userID): Collection
     {
         return User::where('userID', $userID)->get();
+    }
+
+    public function countAllUsers(): int
+    {
+        return User::all()->count();
     }
 }

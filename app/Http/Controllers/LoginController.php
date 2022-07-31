@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,10 +31,13 @@ class LoginController extends BaseController
         {
             Auth::login($user);
 
-            return redirect()->route('articles');
+            //TODO: persist session through all endpoints
+            $this->logged_user = $user;
+
+            return redirect()->route('articles')->with(['user' => $user]);
         }
         else {
-            return redirect()->route('login')->withInput();
+            return redirect()->route('login');
         }
     }
 }
