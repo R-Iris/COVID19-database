@@ -88,6 +88,29 @@
                 width: 100%;
             }
         }
+
+        .alert {
+            padding: 20px;
+            background-color: rgba(244, 67, 54, 0.62);
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -95,8 +118,15 @@
 
 <h2> COVID-19 Non-Profit Health Organization</h2>
 
+@if($errors->any())
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{$errors->first()}}
+    </div>
+@endif
+
 <button onclick="document.getElementById('login').style.display='block'" style="width:auto;">Login</button>
-<a href="/COVID19-database/public/articles" style="width:auto;">Visit as a guest</a>
+<a href="/COVID19-database/public/articles" style="width:auto;" onclick="<?= Session::forget('user'); ?>">Visit as a guest</a>
 
 <div id="login" class="modal">
 

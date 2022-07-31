@@ -18,6 +18,16 @@ class Article extends Model
    protected $table = 'articles';
    protected $primaryKey = 'articleID';
 
+    protected $fillable = [
+        'articleID',
+        'publicationDate',
+        'author',
+        'majorTopic',
+        'minorTopic',
+        'summary',
+        'link',
+    ];
+
    // Model is not timestamped
    public $timestamps  = false;
 
@@ -30,4 +40,9 @@ class Article extends Model
    {
        return Article::where('articleID', $articleID)->get();
    }
+
+    public function countAllArticles(): int
+    {
+        return Article::all()->count();
+    }
 }

@@ -5,25 +5,6 @@ use Illuminate\Support\Facades\Session;
 <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" >
 
 <body>
-<div class="topnav">
-    Welcome
-    @if (Session::get('user'))
-        <?= Session::get('user')['firstName'] . ' ' . Session::get('user')['lastName']; ?>
-    @else
-        guest
-    @endif
-
-    <br>
-    <br>
-
-    @if (Session::get('user'))
-        <a style="background: #395e78" href="#home">Edit my profile</a>
-        <a style="background: #395e78"  href="#contact">Add article</a>
-        <a style="background: #395e78"  href="#contact">List of users</a>
-        <a style="background: #395e78"  href="#contact">List of countries</a>
-    @endif
-</div>
-
 <br>
 
 <a style="background: #395e78"  href="users/new_user">Add user</a>
@@ -36,6 +17,13 @@ use Illuminate\Support\Facades\Session;
     @foreach($users as $user)
         <article>
             <h3>User with ID: <span style="color: rgba(0,255,255,0.55)"> <?= $user['userID']; ?> </span></h3>
+            <br>
+
+            @if ($user->isUserSuspended($user['userID']) != 0)
+                <span style="color: red;">Suspended</span>
+            @endif
+
+            <br>
             <br>
             <?= $user['firstName'] . ' ' . $user['lastName']; ?>
             <br>
@@ -64,6 +52,11 @@ use Illuminate\Support\Facades\Session;
                 <br>
 
                 <a href="users/<?= $user['userID'];?>/edit" class="btn btn-default">Edit</a>
+                @if ($user->isUserSuspended($user['userID']) != 0)
+                    <td><a style="background: #4b783a" data-method="post" class="button is-outlined" href="{{route('user_activate_controller',['userID' => $user['userID']])}}" onclick="return confirm('Are you sure to want to activate this user?')">Activate</a></td>
+                @else
+                    <td><a data-method="post" class="button is-outlined" href="{{route('user_suspend_controller',['userID' => $user['userID']])}}" onclick="return confirm('Are you sure to want to suspend this user?')">Suspend</a></td>
+                @endif
                 <td><a data-method="post" class="button is-outlined" href="{{route('delete_user_controller',['userID' => $user['userID']])}}" onclick="return confirm('Are you sure to want to delete this user?')">Delete</a></td>
             </div>
         </article>

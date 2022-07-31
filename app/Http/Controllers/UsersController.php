@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController extends BaseController
 {
@@ -19,7 +18,7 @@ class UsersController extends BaseController
 
    public function edit(int $userID)
    {
-       $user = (new \App\Models\User)->findUserbyUserID($userID);
+       $user = (new User)->findUserbyUserID($userID);
        return view('users.edit')->with('user', $user);
    }
 
@@ -37,21 +36,18 @@ class UsersController extends BaseController
             'password' => 'required'
         ]);
 
-        $user = (new \App\Models\User)->findUserbyUserID($request->get('userID'))->first();
-
-        $user->firstName = $request->input('firstName');
-        $user->lastName = $request->input('lastName');
-        $user->orgID = $request->input('orgID');
-        $user->citizenship = $request->input('citizenship');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->role = $request->input('role');
-        $user->birthDate = $request->input('birthDate');
-        $user->password = $request->input('password');
-
+        $user = (new User)->findUserbyUserID($request->get('userID'))->first();
 
         $user->update([
-            'firstName' => $request->input('firstName')
+            'firstName' => $request->input('firstName') ? $request->input('firstName') : $user['firstName'],
+            'lastName' => $request->input('lastName') ? $request->input('lastName') : $user['lastName'],
+            'orgID' => $request->input('orgID') ? $request->input('orgID') : $user['orgID'],
+            'citizenship' => $request->input('citizenship') ? $request->input('citizenship') : $user['citizenship'],
+            'email' => $request->input('email') ? $request->input('email') : $user['email'],
+            'phone' => $request->input('phone') ? $request->input('phone') : $user['phone'],
+            'role' => $request->input('role') ? $request->input('role') : $user['role'],
+            'birthDate' => $request->input('birthDate') ? $request->input('birthDate') : $user['birthDate'],
+            'password' => $request->input('password') ? $request->input('password') : $user['password']
         ]);
 
         return redirect('users')->with('success', 'User Updated');
@@ -59,7 +55,7 @@ class UsersController extends BaseController
 
     public function delete(Request $request)
     {
-        $user = (new \App\Models\User)->findUserbyUserID($request->input('userID'))->first();
+        $user = (new User)->findUserbyUserID($request->input('userID'))->first();
         $user->delete();
 
         return redirect('users')->with('success', 'User Deleted');
@@ -80,12 +76,29 @@ class UsersController extends BaseController
         ]);
 
         $userID = [
-            'userID' => (new \App\Models\User)->countAllUsers() + 1
+            'userID' => (new User)->countAllUsers() + 1
         ];
 
 
         DB::table('users')->insert(array_merge($userID, $request->except(['_token'])));
 
         return redirect('users')->with('success', 'User Added');
+    }
+
+    public function activate(Request $request)
+    {
+        DB::table('suspendedAccounts')->where('userID', '=', $request->input('userID'))->delete();
+
+        return redirect('users')->with('success', 'User Activated');
+    }
+
+    public function suspend(Request $request)
+    {
+        DB::table('suspendedAccounts')->insert([
+            'userID' => $request->input('userID'),
+            'suspensionDate' => Carbon::now(),
+            ]);
+
+        return redirect('users')->with('success', 'User Suspended');
     }
 }

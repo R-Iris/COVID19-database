@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -27,17 +28,28 @@ class LoginController extends BaseController
             ->where('password', $request->get('password'))
             ->first();
 
-        if ($user)
-        {
+        if ($user) {
+            if ((new User)->isUserSuspended($user['userID'])) {
+                return redirect()->route('login')->withErrors([
+                    'message' => 'Account is suspended'
+                ]);
+            }
+
             Auth::login($user);
+            Session::put('user', $user);
 
-            //TODO: persist session through all endpoints
-            $this->logged_user = $user;
+            return redirect()->route('articles');
+        } else {
+            return redirect()->route('login')->withErrors([
+                'message' => 'Login details are not correct'
+            ]);
+        }
+    }
 
-            return redirect()->route('articles')->with(['user' => $user]);
-        }
-        else {
-            return redirect()->route('login');
-        }
+    public function logout(Request $request)
+    {
+        Session::forget('user');
+
+        return redirect()->route('login');
     }
 }

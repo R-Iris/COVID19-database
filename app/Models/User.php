@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -51,5 +51,18 @@ class User extends Authenticatable
     public function countAllUsers(): int
     {
         return User::all()->count();
+    }
+
+    public function isUserSuspended(int $userID): int
+    {
+        $query = DB::table('users')
+            ->join('suspendedAccounts', function ($join) use ($userID) {
+                $join->on('users.userID', '=', 'suspendedAccounts.userID')
+                    ->where('suspendedAccounts.userID', '=', $userID);
+            })
+            ->get()
+            ->count();
+
+        return $query;
     }
 }
