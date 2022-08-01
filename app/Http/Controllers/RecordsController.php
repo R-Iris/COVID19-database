@@ -27,8 +27,8 @@ class RecordsController extends BaseController
 
         $record->update([
             'date' => $request->input('date') ? $request->input('date') : $record['date'],
-            'update' => $request->input('update') ? $request->input('name') : $record['update'],
-            'countryID' => $request->input('countryID') ? $request->input('govID') : $record['countryID'],
+            'update' => $request->input('update') ? $request->input('update') : $record['update'],
+            'countryID' => $request->input('countryID') ? $request->input('countryID') : $record['countryID'],
         ]);
 
         return redirect('countries_and_prostaters')->with('success', 'Record Updated');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +44,11 @@ class ArticlesController extends BaseController
     public function delete(Request $request)
     {
         $article = (new Article)->findArticleByArticleID($request->input('articleID'))->first();
-        $article->delete();
+
+        DB::table('articlesRemoved')->insert([
+            'articleID' => $article['articleID'],
+            'suspendedDate' => Carbon::now(),
+        ]);
 
         return redirect('articles')->with('success', 'Article Deleted');
     }
