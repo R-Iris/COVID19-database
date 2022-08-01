@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\Session;
 <br>
 
 
-    @foreach($articles as $article)
+    @foreach($articles as $articleNumber => $article)
         <article>
             <a href="articles/<?= $article['articleID'];?>">Article with ID: <?= $article['articleID']; ?></a>
 
@@ -65,7 +65,7 @@ use Illuminate\Support\Facades\Session;
                 <br>
 
                 <div>
-                    @if (Session::get('user'))
+                    @if (Session::get('user') && Session::get('user')['role'] != 'user')
                         <a href="articles/<?= $article['articleID'];?>/edit" class="btn btn-default">Edit</a>
                         <td><a data-method="post" class="button is-outlined" href="{{route('delete_article_controller',['articleID' => $article['articleID']])}}" onclick="return confirm('Are you sure to want to delete this article?')">Delete</a></td>
                     @endif

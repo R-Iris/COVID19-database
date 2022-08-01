@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Article extends Model
 {
@@ -33,7 +34,9 @@ class Article extends Model
 
    public function getAll(): Collection
    {
-       return Article::all();
+       $articlesRemovedID = DB::table('articlesRemoved')->pluck('articleID')->all();
+
+       return Article::whereNotIn('articleID', $articlesRemovedID)->select('*')->get();
    }
 
    public function findArticleByArticleID(int $articleID): Collection
@@ -44,5 +47,12 @@ class Article extends Model
     public function countAllArticles(): int
     {
         return Article::all()->count();
+    }
+
+    public function addToArticlesRemoved(int $articleID)
+    {
+        return DB::table('articlesRemoved')->insert([
+            'articleID' => $articleID,
+        ]);
     }
 }
